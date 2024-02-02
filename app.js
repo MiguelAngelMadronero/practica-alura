@@ -3,6 +3,7 @@ console.log(numeroSecreto);
 let intentos;
 let listaNumerosSorteados=[];
 let numeroMaximo=10;
+let maximosIntentos=3;
 
 const asignarTexto=(elemento, texto)=>{
     
@@ -21,8 +22,9 @@ const verificarIntento = ()=>{
 
     if(numeroDeUsuario=== numeroSecreto){
         asignarTexto('p',`Acertaste el número en ${intentos} ${(intentos === 1 ) ? 'intento' : 'intentos'}, felicidades`);
-        document.getElementById('reiniciar').removeAttribute('disabled');
-        document.getElementById('intentar').setAttribute('disabled', 'true');
+        // document.getElementById('reiniciar').removeAttribute('disabled');
+        // document.getElementById('intentar').setAttribute('disabled', 'true');
+        BotonNuevoJuego();
         
         
     }else{
@@ -35,6 +37,12 @@ const verificarIntento = ()=>{
             asignarTexto('p', 'El número secreto es mayor')
         }
         intentos++;
+        if(intentos > maximosIntentos){
+            asignarTexto('p', `Llegaste al número máximo de intentos, el número es ${numeroSecreto}`);
+            // document.getElementById('reiniciar').removeAttribute('disabled');
+            // document.getElementById('intentar').setAttribute('disabled', 'true');
+            BotonNuevoJuego();
+        }
         Limpiar();
     }
     return;
@@ -69,14 +77,21 @@ function generarNumero(){
 }
 
 function condicionesIniciales(){
+    
+   
     asignarTexto('h1', 'Juego del número secreto');
-    asignarTexto('p', `Indica un número del 1 al ${numeroMaximo}!`);
+    
+    asignarTexto('p', `Indica un número del 1 al ${numeroMaximo}! Tienes ${maximosIntentos} ${(maximosIntentos === 1 ) ? 'intento' : 'intentos'}`);
+    
     //Generar el número aleatorio
     numeroSecreto=generarNumero();
     console.log(numeroSecreto)
     //inicializar el número de intentos
 
     intentos=1;
+    console.log({intentos})
+
+  
 
     
 }
@@ -98,7 +113,19 @@ function reiniciarJuego(){
    
 }
 
+function BotonNuevoJuego(){
+    document.getElementById('reiniciar').removeAttribute('disabled');
+    document.getElementById('intentar').setAttribute('disabled', 'true');
+}
+
 condicionesIniciales();
+
+
+// Agregar el evento keyup para la tecla Enter en el campo de entrada
+document.getElementById('valorUsuario').addEventListener('keyup', function (event) {
+    if (event.key === 'Enter') {
+        verificarIntento();
+    }});
 
 
 
